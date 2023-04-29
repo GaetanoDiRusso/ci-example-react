@@ -1,0 +1,27 @@
+name: Deployment workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Checkoout the branch, install dependencies, and run tests
+    runs-on: ubuntu-22.04
+    steps:
+      # Use an external action
+      - uses: actions/checkout@v3
+        # Attributes we want to use to execute the action
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+      # Run tests
+      - name: Run tests
+        run: npm run test
+        
