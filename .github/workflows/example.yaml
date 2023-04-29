@@ -1,0 +1,23 @@
+# Name of the workflow
+name: Example workflow
+
+# When the workflow is going to be executed (on push to branch main)
+on:
+  push:
+    branches:
+      - main
+
+# Which jobs are going to be executed
+jobs: 
+  # First job to be executed
+  example_job:
+    # Which virtual machine the job is going to run
+    runs-on: ubuntu-22.04
+
+    # Which are the steps
+    steps: 
+      # Name of the step
+      - name: Example Job
+      # What is going to run
+        run: |
+          echo "Running example Job"
