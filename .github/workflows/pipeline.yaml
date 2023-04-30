@@ -27,7 +27,7 @@ jobs:
       # We save the build, because we are going to need it in the deployment step
       # and we want to avoid building again
       - name: Save build
-        uses: actions/upload-artifact@2
+        uses: actions/upload-artifact@v3
         with:
           name: build
           path: build
@@ -55,6 +55,13 @@ jobs:
     steps:
       # See that Render creates the build and start the app automatically,
       # so we don't need to do any more
+      # But if we need to build the app, we could use the already created one:
+      - name: Get the app build
+        uses: actions/download-artifact@v3
+        with:
+          name: build
+          path: build
+      # ------------------------------------------------
       - name: Deploy to Render
         if: ${{ github.event_name == 'push' }}
         uses: sws2apps/render-deployment@main
