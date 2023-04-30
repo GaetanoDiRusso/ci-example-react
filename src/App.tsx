@@ -8,7 +8,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          React app with CI/CD integration
+          React app with CI/CD integration | Github Actions
         </p>
         <a
           className="App-link"
