@@ -9,7 +9,22 @@ on:
     types: [opened, synchronize]
 
 jobs:
+  install-dependencies:
+    name: Install Node modules
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          cache: npm
+          node-version: 16
+      - name: Install dependencies
+        run: npm install
+
   build: 
+    needs: [install-dependencies]
     name: Build the app
     runs-on: ubuntu-22.04
     steps:
@@ -18,6 +33,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
+          cache: npm
           node-version: 16
       - name: Install dependencies
         run: npm install
@@ -34,6 +50,7 @@ jobs:
 
 
   test:
+    needs: [install-dependencies]
     name: Run tests
     runs-on: ubuntu-22.04
     steps:
@@ -42,6 +59,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
+          cache: npm
           node-version: 16
       - name: Install dependencies
         run: npm install
@@ -56,7 +74,7 @@ jobs:
       # See that Render creates the build and start the app automatically,
       # so we don't need to do any more
       # But if we need to build the app, we could use the already created one:
-      - name: Get the app build
+      - name: Get the build
         uses: actions/download-artifact@v3
         with:
           name: build
