@@ -10,7 +10,7 @@ on:
 
 jobs:
   deploy:
-    name: Checkoout the branch, install dependencies, and run tests
+    name: Deployment workflow
     runs-on: ubuntu-22.04
     steps:
       # Use an external action
@@ -29,15 +29,6 @@ jobs:
       # Run tests
       - name: Run tests
         run: npm run test
-
-      - name: Log github event
-        env:
-          RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-        run: | 
-          echo ${{ github.event_name }}
-          echo $RENDER_SERVICE_ID
-          echo $RENDER_API_KEY
       # Deploy to Render
       - name: Deploy to Render
         if: ${{ github.event_name == 'push' }}
