@@ -33,7 +33,7 @@ jobs:
       # Deploy to Render
       - name: Deploy to Render
         if: ${{ github.event == 'push' }}
-        uses: sws2apps/render-deployment@1.2.0
+        uses: sws2apps/render-deployment@main
         with:
           serviceId: ${{ secrets.RENDER_SERVICE_ID }}
           apiKey: ${{ secrets.RENDER_API_KEY }}
