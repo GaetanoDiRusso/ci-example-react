@@ -9,32 +9,57 @@ on:
     types: [opened, synchronize]
 
 jobs:
-  deploy:
-    name: Deployment workflow
+  build: 
+    name: Build the app
     runs-on: ubuntu-22.04
     steps:
-      # Use an external action
       - uses: actions/checkout@v3
-        # Attributes we want to use to execute the action
         with:
           fetch-depth: 0
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      # Install dependencies
       - name: Install dependencies
         run: npm install
       - name: Build app
         run: npm run build
-      # Run tests
+
+      # We save the build, because we are going to need it in the deployment step
+      # and we want to avoid building again
+      - name: Save build
+        uses: actions/upload-artifact@2
+        with:
+          name: build
+          path: build
+
+
+  test:
+    name: Run tests
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: npm install
       - name: Run tests
         run: npm run test
-      # Deploy to Render
+
+  deploy:
+    needs: [build, test]
+    name: Deploy to Render
+    runs-on: ubuntu-22.04
+    steps:
+      # See that Render creates the build and start the app automatically,
+      # so we don't need to do any more
       - name: Deploy to Render
         if: ${{ github.event_name == 'push' }}
         uses: sws2apps/render-deployment@main
         with:
           serviceId: ${{ secrets.RENDER_SERVICE_ID }}
           apiKey: ${{ secrets.RENDER_API_KEY }}
-          multipleDeployment: false #optional, default true
+          multipleDeployment: false
         
