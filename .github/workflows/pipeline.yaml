@@ -31,12 +31,12 @@ jobs:
         run: npm run test
       # Deploy to Render
       - name: Deploy to Render
-        if: ${{ github.event == 'push' }}
+        if: github.event_name == 'push'
         uses: sws2apps/render-deployment@main
         with:
           serviceId: ${{ secrets.RENDER_SERVICE_ID }}
           apiKey: ${{ secrets.RENDER_API_KEY }}
           multipleDeployment: false #optional, default true
       - name: Log github event
-        run: echo ${{ github.event }}
+        run: echo ${{ github.event_name }}
         
